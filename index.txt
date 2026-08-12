@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Favorite Person</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+    background:#000;
+    overflow:hidden;
+    font-family:'Courier New', monospace;
+}
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+}
+#text{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    color:white;
+    font-size:2rem;
+    text-align:center;
+    width:90%;
+    text-shadow:0 0 10px #fff;
+}
+#cursor{
+    display:inline-block;
+    width:10px;
+    animation:blink .8s infinite;
+}
+@keyframes blink{
+    50%{opacity:0}
+}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div id="text"><span id="typing"></span><span id="cursor">|</span></div>
+
+<script>
+const canvas=document.getElementById('stars');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+const stars=[];
+for(let i=0;i<180;i++){
+    stars.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*2,
+        o:Math.random()
+    });
+}
+
+function drawStars(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(const s of stars){
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle="rgba(255,255,255,"+s.o+")";
+        ctx.fill();
+        s.o += (Math.random()-0.5)*0.03;
+        if(s.o<0.1) s.o=0.1;
+        if(s.o>1) s.o=1;
+    }
+    requestAnimationFrame(drawStars);
+}
+drawStars();
+
+const message="Hey Love...\\n\\nI was waiting for you.\\n\\nI love you more than words can say. ❤️";
+let i=0;
+function type(){
+    if(i<message.length){
+        document.getElementById('typing').innerHTML +=
+            message[i]==='\\n' ? '<br>' : message[i];
+        i++;
+        setTimeout(type,60);
+    }
+}
+setTimeout(type,800);
+
+window.addEventListener('resize',()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+});
+</script>
+</body>
+</html>
